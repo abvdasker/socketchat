@@ -1,0 +1,19 @@
+doctype html
+html(lang='en')
+  head
+    | <link href="/public/style/index.css" rel="stylesheet" type="text/css">
+    | <script src="/public/dist/js/jquery.js"></script>
+    | <script src="/public/js/index.js"></script>
+  body
+    div#main
+      h2 socket chat
+      hr
+      div#info
+        label(for="username") Enter a username:
+        input#username(type="text")
+        div#filled_username
+        button(onclick="saveUsername();") Save
+      div#chatrooms
+        select(multiple=true)
+          for room in rooms
+            option(value=room.name)= room.name
