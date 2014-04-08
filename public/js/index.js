@@ -33,3 +33,22 @@ function saveUsername() {
 function User(name) {
   this.username = name;
 }
+
+var socket = new WebSocket("ws://localhost:8008", ["soap"]);
+
+socket.onopen = function() {
+  socket.send("Hello Server!");
+}
+
+socket.onerror = function(error) {
+  console.log("WebSocket Error " +error);
+}
+
+socket.onmessage = function(e) {
+  console.log("Server: " + e.data);
+  $("#messages").append("<div>Server: " + e.data+"</div>")
+}
+
+function sendMessage(msg) {
+  socket.send(msg);
+}

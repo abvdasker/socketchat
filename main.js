@@ -1,6 +1,15 @@
-var io = require('socket.io');
-io.listen(8008);
-
+var WebSocketServer = require("ws").Server;
+var wss = new WebSocketServer({port: 8008});
+var i = 0;
+wss.on('connection', function(ws) {
+  ws.on("message", function (msg) {
+    console.log('Client: '+msg);
+  });
+  ws.send("Hello Client!");
+  setInterval(function() {
+    ws.send((i++).toString());
+  }, 1000);
+});
 
 var express = require("express");
 var app = express();
