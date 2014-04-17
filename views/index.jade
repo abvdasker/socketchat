@@ -14,7 +14,10 @@ html(lang='en')
         div#filled_username
         button(onclick="saveUsername();") Save
       div#chatrooms
-        select(multiple=true)
-          for room in rooms
-            option(value=room.name)= room.name
+        select(multiple=false, size=10)
+      div#add_remove
+        button(onclick="addRoom()") +
+        button(onclick="removeRoom()") -
+      div#roomName
+        input(type="text", placeholder="new room name")
       div#messages

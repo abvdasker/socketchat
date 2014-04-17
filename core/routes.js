@@ -8,6 +8,6 @@ exports.route = function(express, app) {
 
   app.get("/", handlers.index);
   
-  app.post("/newuser", handlers.newUser);
+  //app.post("/newuser", handlers.newUser);
 
 }

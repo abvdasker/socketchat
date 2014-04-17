@@ -20,6 +20,10 @@ hr {
   margin-top: 20px;
 }
 
+#chatrooms select {
+  width: 200px;
+}
+
 #filled_username {
   display: none;
 }
