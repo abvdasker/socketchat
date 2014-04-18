@@ -18,6 +18,7 @@ function ChatRoom(name, owner) {
   this.numUsers = function() {
     return Object.keys(this.users).length;
   }
+  
 }
 
 module.exports = ChatRoom;

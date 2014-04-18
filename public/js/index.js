@@ -52,14 +52,38 @@ socket.onerror = function(error) {
 }
 
 socket.onmessage = function(e) {
-  console.log("Server: " + e.data);
   logMessage(e.data);
   var data = JSON.parse(e.data);
   
-  if (data.action == "roomList") {
-    setRooms(data.rooms);
+  if (data.success) {
+    if (data.action == "roomList") {
+      setRooms(data.rooms);
+    } else if (data.action == "setName") {
+      setUserName(data.username);
+    } else if (data.action == "joinRoom") {
+      $("#joinRoom").attr("disabled", "disabled");
+      setRoomName(data.roomName);
+    } else if (data.action == "leaveRoom") {
+      setRoomName("");
+      $("#joinRoom").removeAttr("disabled");
+    } (data.action == "receiveRoomMessage") {
+      
+    }
   }
   //$("#messages").append("<div>Server: " + e.data+"</div>");
+}
+
+function setRoomName(roomName) {
+  $("#roomName").text(roomName);
+}
+
+function setUserName(username) { 
+  var $usnm = $("#filled_username");
+  $usnm.text(username);
+  $("#username").hide();
+  $("#info button").hide();
+  $usnm.addClass("inline");
+  $("#joinRoom").removeAttr("disabled");
 }
 
 function sendMessage(msg) {
@@ -67,7 +91,7 @@ function sendMessage(msg) {
 }
 
 function logMessage(msg) {
-  console.log(msg);
+  console.log("Server: " +msg);
 }
 
 function setRooms(room_names) {
@@ -82,12 +106,11 @@ function setRooms(room_names) {
 }
 
 function addRoom() {
-  var $rnInput = $("#roomName input");
+  var $rnInput = $("#newRoomName");
   var roomName = $rnInput.val();
   $rnInput.val("");
-  
 
-  if (roomName != null && roomName != "") {
+  if (validName(roomName)) {
     sendMessage({
       action : "createRoom",
       roomName : roomName
@@ -97,9 +120,26 @@ function addRoom() {
 
 function removeRoom() {
   var roomName = $("#chatrooms select").val();
-  console.log("selected room for deletion: "+roomName);
-  sendMessage({
-    action : "deleteRoom",
-    roomName : roomName
-  });
+  if (validName(roomName)) {
+    console.log("selected room for deletion: "+roomName);
+    sendMessage({
+      action : "deleteRoom",
+      roomName : roomName
+    });
+  }
+}
+
+function joinRoom() {
+  var roomName = $("#chatrooms select").val();
+  if (validName(roomName)) {
+    console.log("attempting to join room "+roomName);
+    sendMessage({
+      action : "joinRoom",
+      roomName : roomName
+    });
+  }
+}
+
+function validName(s) {
+  return s != null && s != "";
 }

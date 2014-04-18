@@ -16,14 +16,73 @@ hr {
   height: 1px;
 }
 
-#chatrooms {
+#chat_container {
   margin-top: 20px;
+  height: 190px;
+}
+
+
+#room_block {
+  float: left;
+  width: 30%;
+}
+
+#chatrooms {
 }
 
 #chatrooms select {
-  width: 200px;
+  width: 100%;
 }
 
 #filled_username {
   display: none;
+}
+
+.inline {
+  display: inline !important;
+}
+
+#room_foot {
+  margin-top: 6px;
+}
+
+#room_foot > div {
+  display: inline;
+  float: left;
+}
+
+#add_remove {
+  margin-right: 10px;
+  float: left;
+  width: 60px;
+}
+
+#newRoomName {
+  float: right;
+  width: 100px;
+}
+
+#joinRoom {
+  float: right;
+}
+
+#message_block {
+  overflow-y: scroll;
+  border: 1px solid black;
+  
+  float: right;
+  width: 69%;
+  height: 100%;
+}
+
+#roomName {
+  
+}
+
+.message span div {
+  display: inline;
+}
+
+.template {
+  
 }

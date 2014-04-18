@@ -18,7 +18,8 @@ function ws_app(wss) {
     users.push(new_user);
     new_user.sendMsg({
       action : "roomList",
-      rooms : roomNames(rooms)
+      rooms : roomNames(rooms),
+      success : true
     });
     ws.on("message", messageReceived);
   });
@@ -57,11 +58,6 @@ function messageReceived(msg) {
     if (!roomNameExists(msg.roomName) && user.roomCount < 10) {
       var newRoom = new ChatRoom(msg.roomName)
       rooms[newRoom.name] = newRoom;
-      /*user.sendMsg({
-        action : action,
-        success : true,
-        roomName : newRoom.name
-      });*/
       user.roomCount++;
       broadcastRooms();
     } else {
@@ -74,7 +70,6 @@ function messageReceived(msg) {
   } else if (action == "deleteRoom") {
     console.log("attempting to delete a room");
     room = rooms[msg.roomName];
-    console.log("rlen: "+room.numUsers()+" ucnt: "+user.roomCount)
     if (room.numUsers() == 0 && user.roomCount > 0) {
       delete rooms[room.name];
       user.roomCount--;
@@ -89,6 +84,12 @@ function messageReceived(msg) {
   } else if (action == "joinRoom") {
     room = rooms[msg.roomName];
     user.joinRoom(room);
+    roomUsers = room.users;
+    user.sendMsg({
+      action : action,
+      success : true,
+      roomName : room.name
+    });
   } else if (action == "leaveRoom") {
     
   } else if (action == "sendToRoom") {
@@ -100,20 +101,30 @@ function messageReceived(msg) {
 }
 
 function broadcastRooms() {
-  broadcast({
+  broadcast(users, {
     action : "roomList",
-    rooms : roomNames(rooms)
+    rooms : roomNames(rooms),
+    success : true
   });
 }
 
-function broadcast(msg) {
-  for (i in users) {
-    users[i].sendMsg(msg);
+function broadcast(some_users, msg) {
+  for (i in some_users) {
+    users[i].sendMsg(msg); // catch send failure and delete user!
   }
 }
 
 function logMessage(msg) {
   console.log(msg);
+}
+
+function getUserNames(some_users) {
+  var ar = [];
+  for (user in some_users) {
+    ar.push(usr.username);
+  }
+  
+  return ar;
 }
 
 function newRoom(name) {

@@ -13,11 +13,22 @@ html(lang='en')
         input#username(type="text")
         div#filled_username
         button(onclick="saveUsername();") Save
-      div#chatrooms
-        select(multiple=false, size=10)
-      div#add_remove
-        button(onclick="addRoom()") +
-        button(onclick="removeRoom()") -
-      div#roomName
-        input(type="text", placeholder="new room name")
-      div#messages
+      div#chat_container
+        div#room_block
+          div#chatrooms
+            select(multiple=false, size=10)
+          div#room_foot
+            div
+              div#add_remove
+                button(onclick="addRoom()") +
+                button(onclick="removeRoom()") -
+              input#newRoomName(type="text", placeholder="new room name")
+            button#joinRoom(onclick="joinRoom()" disabled="true") join room
+        div#message_block
+          div#message_area
+            div.message.template
+              span 
+                div test_username
+                div= new Date().toLocaleTimeString() + " =>"
+              div.message_text
+          div#roomName
