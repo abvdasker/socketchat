@@ -93,7 +93,24 @@ function messageReceived(msg) {
   } else if (action == "leaveRoom") {
     
   } else if (action == "sendToRoom") {
-    
+    console.log("trying to send to room");
+    room = user.room;
+    console.log(room.name + " " + msg.text);
+    if (room != null && msg.text != null && msg.text != "") {
+      broadcast(room.users, {
+        action : "receiveFromRoom",
+        success : true,
+        text : msg.text,
+        username : user.username,
+        time : new Date().toLocaleTimeString()
+      });
+    } else {
+      user.sendMsg({
+        action : action,
+        success : false,
+        reason : "user "+user.username+" is not in a room"
+      });
+    }
   } else {
     console.log("missed everything!");
   }
@@ -110,7 +127,7 @@ function broadcastRooms() {
 
 function broadcast(some_users, msg) {
   for (i in some_users) {
-    users[i].sendMsg(msg); // catch send failure and delete user!
+    some_users[i].sendMsg(msg); // catch send failure and delete user!
   }
 }
 

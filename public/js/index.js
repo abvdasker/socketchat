@@ -61,16 +61,34 @@ socket.onmessage = function(e) {
     } else if (data.action == "setName") {
       setUserName(data.username);
     } else if (data.action == "joinRoom") {
-      $("#joinRoom").attr("disabled", "disabled");
-      setRoomName(data.roomName);
+      setRoom(data.roomName);
     } else if (data.action == "leaveRoom") {
       setRoomName("");
       $("#joinRoom").removeAttr("disabled");
-    } (data.action == "receiveRoomMessage") {
-      
+      $("#sendMessage").attr("disabled", "disabled");
+    } else if (data.action == "receiveFromRoom") {
+      addMessage(data);
+    } else {
+      console.log("missed handlers");
     }
   }
   //$("#messages").append("<div>Server: " + e.data+"</div>");
+}
+
+function addMessage(data) {
+  var $new_msg = $(".message.template").clone();
+  $new_msg.find(".msg_username").text(data.username);
+  $new_msg.find(".msg_time").text(data.time);
+  $new_msg.find(".msg_text").text(data.text);
+  $new_msg.removeClass("template");
+  $("#message_area").append($new_msg);
+}
+
+function setRoom(roomName) {
+  $("#joinRoom").attr("disabled", "disabled");
+  $("#sendMessage").removeAttr("disabled");
+  setRoomName(roomName);
+  $("#message_area").empty();
 }
 
 function setRoomName(roomName) {
@@ -136,6 +154,17 @@ function joinRoom() {
     sendMessage({
       action : "joinRoom",
       roomName : roomName
+    });
+  }
+}
+
+function sendToRoom() {
+  var $input = $("#message_input textarea");
+  var text = $input.val();
+  if (validName(text)) {
+    sendMessage({
+      action : "sendToRoom",
+      text : text
     });
   }
 }
