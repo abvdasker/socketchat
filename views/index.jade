@@ -28,11 +28,12 @@ html(lang='en')
                 button(onclick="addRoom();") +
                 button(onclick="removeRoom();") -
               input#newRoomName(type="text", placeholder="new room name")
-            button#joinRoom(onclick="joinRoom()", disabled="true") join room
+            button#joinRoom(onclick="joinRoom()", disabled="true") Join room
         div#message_block
           div#message_area
           div#message_input
             textarea
           div#message_foot
             button#sendMessage(disabled="true", onclick="sendToRoom();") Send message
+            button#leaveRoom(disabled="true" onclick="sendLeaveRoom();") Leave room
             div#roomName Test

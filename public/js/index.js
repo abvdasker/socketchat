@@ -16,25 +16,6 @@ function saveUsername() {
   }
 }
 
-function postName(name, $un_input) {
-  $.post("/newuser", {
-    username : name
-  }, function(data) {
-    if (data) {
-      me = new User(name);
-      console.log(me.username);
-      $un_input.hide();
-      var $filled = $("#filled_username");
-      $filled.text(me.username);
-      $filled.css("display", "inline");
-      $filled.show();
-      $("button").attr("disabled", true);
-    } else {
-      console.log("failure");
-    }
-  });
-}
-
 function User(name) {
   this.username = name;
 }
@@ -64,9 +45,7 @@ socket.onmessage = function(e) {
     } else if (data.action == "joinRoom") {
       setRoom(data.roomName);
     } else if (data.action == "leaveRoom") {
-      setRoomName("");
-      $("#joinRoom").removeAttr("disabled");
-      $("#sendMessage").attr("disabled", "disabled");
+      leaveRoom();
     } else if (data.action == "receiveFromRoom") {
       addMessage(data);
     } else if (data.action == "receiveCoordinates") {
@@ -113,6 +92,11 @@ function sendCoordinates(ev) {
 }
 
 function addMessage(data) {
+  if (data.username == me) {
+    $("#message_input textarea").val("");
+    //data.username = "ME";
+  }
+  
   var $new_msg = $(".message.template").clone();
   $new_msg.find(".msg_username").text(data.username);
   $new_msg.find(".msg_time").text(data.time);
@@ -124,15 +108,25 @@ function addMessage(data) {
 function setRoom(roomName) {
   $("#joinRoom").attr("disabled", "disabled");
   $("#sendMessage").removeAttr("disabled");
+  $("#leaveRoom").removeAttr("disabled");
   setRoomName(roomName);
   $("#message_area").empty();
+}
+
+function leaveRoom() {
+  setRoomName("");
+  $("#message_area").empty();
+  $("#joinRoom").removeAttr("disabled");
+  $("#sendMessage").attr("disabled", "disabled");
+  $("#leaveRoom").attr("disabled", "disabled");
 }
 
 function setRoomName(roomName) {
   $("#roomName").text(roomName);
 }
 
-function setUserName(username) { 
+function setUserName(username) {
+  me = username;
   var $usnm = $("#filled_username");
   $usnm.text(username);
   $("#username").hide();
@@ -195,9 +189,16 @@ function joinRoom() {
   }
 }
 
+function sendLeaveRoom() {
+  sendMessage({
+    action : "leaveRoom"
+  })
+}
+
 function sendToRoom() {
   var $input = $("#message_input textarea");
   var text = $input.val();
+  $input.val("");
   if (validName(text)) {
     sendMessage({
       action : "sendToRoom",

@@ -21,6 +21,7 @@ function ws_app(wss) {
   
 }
 
+// this could be way faster if the JSON parsing didn't have to happen on both ends and serialized binary were sent instead.
 function messageReceived(msg) {
   logMessage(msg);
   msg = JSON.parse(msg);
@@ -51,7 +52,7 @@ function messageReceived(msg) {
   } else if (action == "joinRoom") {
     Actions.joinRoom(action, user, msg);
   } else if (action == "leaveRoom") {
-    
+    Actions.leaveRoom(action, user);
   } else if (action == "sendCoordinates") {
     Actions.sendCoordinates(msg);
   } else if (action == "sendToRoom") {

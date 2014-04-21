@@ -3,7 +3,7 @@ var Global = require("./global.js")
 function User(conn, id) {
   this.ws = conn;
   this.id = id;
-  //this.username = name;
+  this.username = null;
   this.room = null;
   this.roomCount = 0;
   

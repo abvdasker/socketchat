@@ -45,6 +45,14 @@ function joinRoom(action, user, msg) {
   });
 }
 
+function leaveRoom(action, user) {
+  user.leaveRoom();
+  user.sendMsg({
+    action : action,
+    success : true
+  })
+}
+
 function sendMsgToRoom(room, user, msg) {
   broadcast(room.users, {
     action : "receiveFromRoom",
@@ -96,5 +104,6 @@ module.exports = {
   actionFailure : actionFailure,
   deleteRoom : deleteRoom,
   joinRoom : joinRoom,
-  sendMsgToRoom : sendMsgToRoom
+  sendMsgToRoom : sendMsgToRoom,
+  leaveRoom : leaveRoom
 }
