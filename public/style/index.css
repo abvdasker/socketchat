@@ -114,3 +114,36 @@ hr {
 .template {
   display: none;
 }
+
+.blip {
+  position: absolute;
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  display: block;
+  border-radius: 50%;
+  border: 3px solid red;
+  animation: fadeOut 2s linear 1;
+  animation-iteration-count: 1;
+  -webkit-animation: fadeOut 2s linear 1;
+  -webkit-animation-iteration-count: 1;
+  opacity: 0;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

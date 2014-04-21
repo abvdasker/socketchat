@@ -1,6 +1,9 @@
-function User(conn, name) {
+var Global = require("./global.js")
+
+function User(conn, id) {
   this.ws = conn;
-  this.username = name;
+  this.id = id;
+  //this.username = name;
   this.room = null;
   this.roomCount = 0;
   
@@ -16,7 +19,19 @@ function User(conn, name) {
   
   this.sendMsg = function(msg) {
     var msgStr = JSON.stringify(msg);
-    this.ws.send(msgStr);
+    var that = this;
+    this.ws.send(msgStr, failure);
+    
+    //automatically handles disconnected users by deleting them
+    function failure(error) {
+      if (typeof error != "undefined") {
+        console.log(error);
+        if (that.room != null) {
+          that.room.removeUser(that);
+        }
+        Global.deleteUser(that);
+      }
+    }
   }
 }
 
